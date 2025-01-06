@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Logging;
 using Eremite;
 using Eremite.Controller;
 using Eremite.Model;
@@ -13,6 +14,7 @@ namespace GetSharkCat
     {
         public static Plugin Instance;
         private Harmony harmony;
+        internal static ManualLogSource myLog;
 
         private void Awake()
         {
@@ -20,6 +22,8 @@ namespace GetSharkCat
             harmony = Harmony.CreateAndPatchAll(typeof(Plugin));
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
             Configs.EffectEnabled = Configs.EffectEnabled; // I have no idea how to do this sensibly. Sorry!
+            myLog = Instance.Logger;
+            myLog.LogInfo("OKOŃb");
         }
 
         [HarmonyPatch(typeof(MainController), nameof(MainController.OnServicesReady))]
@@ -44,25 +48,10 @@ namespace GetSharkCat
 
             if (isNewGame)
             {
-                GameNpcModel cat = SO.Settings.GetNpc("Cat");
-                SO.NpcsService.RemoveNpc(cat); // To make sure no doubles are present when someone has the cycle reward.
-                Instance.Logger.LogInfo("Cat NPC removed.");
-
-                SO.NpcsService.SpawnNewNpc(cat, SO.BuildingsService.GetMainHearth().Entrance);
-                Instance.Logger.LogInfo("Cat NPC added.");
-
-                if (Configs.EffectEnabled && !SO.PerksService.HasPerk("[WE] First Elder Bonus"))
+                if (Configs.CheckForDuplicates)
                 {
-                    EffectModel catEffectModel = MB.Settings.GetEffect("[WE] First Elder Bonus");
-                    catEffectModel.Apply();
-                    Instance.Logger.LogInfo("Cat effect cycle perk added.");
-
-                    SO.NpcsService.RemoveNpc(cat); // Doing this because applying the perk spawns the cat.
-                    Instance.Logger.LogInfo("Cat NPC removed.");
-
+                    CatGranter.SafeGrant();
                 }
-
-
             }
         }
     }
