@@ -1,0 +1,7 @@
+{
+    "name": "GetSharkCat",
+    "version_number": "1.0.0",
+    "website_url": "https://github.com/scheals/GetSharkCat",
+    "description": "A simple Against the Storm mod that allows the player to always have a Shark Cat and its effect.",
+    "dependencies": [ "BepInEx-BepInExPack-5.4.2100", "ATS_API_Devs-API-3.3.1" ]
+}

@@ -17,6 +17,7 @@ namespace GetSharkCat
             Instance = this;
             harmony = Harmony.CreateAndPatchAll(typeof(Plugin));
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
+            Configs.EffectEnabled = Configs.EffectEnabled;
         }
 
         [HarmonyPatch(typeof(MainController), nameof(MainController.OnServicesReady))]
@@ -48,9 +49,15 @@ namespace GetSharkCat
                 SO.NpcsService.Register(cat.prefab);
                 Instance.Logger.LogInfo("Cat NPC added.");
 
-                EffectModel catEffect = MB.Settings.GetEffect("[WE] First Elder Cat Resolve");
-                catEffect.Apply();
-                Instance.Logger.LogInfo("Cat effect perk added.");
+                if (Configs.EffectEnabled)
+                {
+
+                    EffectModel catEffect = MB.Settings.GetEffect("[WE] First Elder Cat Resolve");
+                    catEffect.Apply();
+                    Instance.Logger.LogInfo("Cat effect perk added.");
+                }
+
+
             }
         }
     }
