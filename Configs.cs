@@ -5,12 +5,12 @@ namespace GetSharkCat;
 
 public static class Configs
 {
-    public static bool EffectEnabled
+    public static bool EffectGrantingEnabled
     {
-        get => m_EffectEnabled.Value;
+        get => m_EffectGrantingEnabled.Value;
         set
         {
-            m_EffectEnabled.Value = value;
+            m_EffectGrantingEnabled.Value = value;
             Plugin.Instance.Config.Save();
         }
     }
@@ -25,7 +25,7 @@ public static class Configs
         }
     }
 
-    private static ConfigEntry<bool> m_EffectEnabled = Bind("General", "Add Cat perk effect", false, "When set to true adds the associated reward perk.");
+    private static ConfigEntry<bool> m_EffectGrantingEnabled = Bind("General", "Add Cat perk effect", false, "When set to true adds the associated reward perk.");
     private static ConfigEntry<bool> m_CheckForDuplicates = Bind("General", "Check for duplicate cats and effects", true,
         "When set to true it checks for presence of other cats or effects being active already.");
 

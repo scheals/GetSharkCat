@@ -21,7 +21,7 @@ namespace GetSharkCat
             Instance = this;
             harmony = Harmony.CreateAndPatchAll(typeof(Plugin));
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
-            Configs.EffectEnabled = Configs.EffectEnabled; // I have no idea how to do this sensibly. Sorry!
+            Configs.EffectGrantingEnabled = Configs.EffectGrantingEnabled; // I have no idea how to do this sensibly. Sorry!
             myLog = Instance.Logger;
             myLog.LogInfo("OKOŃb");
         }
@@ -51,6 +51,10 @@ namespace GetSharkCat
                 if (Configs.CheckForDuplicates)
                 {
                     CatGranter.SafeGrant();
+                }
+                else
+                {
+                    CatGranter.UnsafeGrant();
                 }
             }
         }

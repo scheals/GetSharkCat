@@ -15,7 +15,7 @@ public class CatGranter
         Plugin.myLog.LogInfo("Cat NPC removed.");
         GrantCat();
 
-        if ((Configs.EffectEnabled && !SO.PerksService.HasPerk("[WE] First Elder Bonus")))
+        if ((Configs.EffectGrantingEnabled && IsSafetyOn()))
         {
             GrantCatEffect();
             SO.NpcsService.RemoveNpc(Cat); // Doing this because applying the perk spawns the cat.
@@ -23,13 +23,22 @@ public class CatGranter
         }
     }
 
-    public static void GrantCat()
+    public static void UnsafeGrant()
+    {
+        GrantCat();
+        if (Configs.EffectGrantingEnabled)
+        {
+            GrantCatEffect();
+        }
+    }
+
+    private static void GrantCat()
     {
         SO.NpcsService.SpawnNewNpc(Cat, SO.BuildingsService.GetMainHearth().Entrance);
         Plugin.myLog.LogInfo("Cat NPC added.");
     }
 
-    public static void GrantCatEffect()
+    private static void GrantCatEffect()
     {
         EffectModel catEffectModel = MB.Settings.GetEffect("[WE] First Elder Bonus");
         catEffectModel.Apply();
@@ -44,4 +53,10 @@ public class CatGranter
 
         }
     }
+
+    private static bool IsSafetyOn()
+    {
+        return !SO.PerksService.HasPerk("[WE] First Elder Bonus");
+    }
+
 }
