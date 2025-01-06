@@ -2,7 +2,9 @@
 using Eremite;
 using Eremite.Controller;
 using Eremite.Model;
+using Eremite.Model.Meta;
 using HarmonyLib;
+using UnityEngine.Assertions.Must;
 
 namespace GetSharkCat
 {
@@ -17,7 +19,7 @@ namespace GetSharkCat
             Instance = this;
             harmony = Harmony.CreateAndPatchAll(typeof(Plugin));
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
-            Configs.EffectEnabled = Configs.EffectEnabled;
+            Configs.EffectEnabled = Configs.EffectEnabled; // I have no idea how to do this sensibly. Sorry!
         }
 
         [HarmonyPatch(typeof(MainController), nameof(MainController.OnServicesReady))]
@@ -42,19 +44,22 @@ namespace GetSharkCat
 
             if (isNewGame)
             {
-                // add the shark cat npc (if not present - to figure out, now you'll get doubles)
-                // depending on config add the effect
                 GameNpcModel cat = SO.Settings.GetNpc("Cat");
+                SO.NpcsService.RemoveNpc(cat); // To make sure no doubles are present when someone has the cycle reward.
+                Instance.Logger.LogInfo("Cat NPC removed.");
+
                 SO.NpcsService.SpawnNewNpc(cat, SO.BuildingsService.GetMainHearth().Entrance);
-                SO.NpcsService.Register(cat.prefab);
                 Instance.Logger.LogInfo("Cat NPC added.");
 
-                if (Configs.EffectEnabled)
+                if (Configs.EffectEnabled && !SO.PerksService.HasPerk("[WE] First Elder Bonus"))
                 {
+                    EffectModel catEffectModel = MB.Settings.GetEffect("[WE] First Elder Bonus");
+                    catEffectModel.Apply();
+                    Instance.Logger.LogInfo("Cat effect cycle perk added.");
 
-                    EffectModel catEffect = MB.Settings.GetEffect("[WE] First Elder Cat Resolve");
-                    catEffect.Apply();
-                    Instance.Logger.LogInfo("Cat effect perk added.");
+                    SO.NpcsService.RemoveNpc(cat); // Doing this because applying the perk spawns the cat.
+                    Instance.Logger.LogInfo("Cat NPC removed.");
+
                 }
 
 

@@ -9,6 +9,7 @@
     <LangVersion>latest</LangVersion>
 	<StormPath>D:\\SteamLibrary\\steamapps\\common\\Against the Storm</StormPath>
 	<BepInExPath>C:\\Users\\$(WINDOWSUSERNAME)\\AppData\\Roaming\\r2modmanPlus-local\\AgainstTheStorm\\profiles\\Schealsdev</BepInExPath>
+	<OutputPath>D:\\Thunderstore</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -337,11 +338,27 @@
   </ItemGroup>
 
   <Target Name="Deploy" AfterTargets="Build">
-		<ItemGroup>
-			<Assembly Include="$(OutputPath)\$(AssemblyName).dll" />
-        <Assets Include="$(OutputPath)\assets\*.*" />
-		</ItemGroup>
-	  <Copy SourceFiles="@(Assembly)" DestinationFolder="$(BepInExPath)\BepInEx\plugins" />
-	  <Copy SourceFiles="@(Assets)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\assets\" />
+	  <ItemGroup>
+		  <Assembly Include="$(OutputPath)\$(AssemblyName).dll" />
+	  </ItemGroup>
+	  
+	  <!-- Create a folder with all the .dlls and files to easily uplaod to thunderstore, courtesy of James and DebugMenu mod -->
+	  <Copy SourceFiles="@(Assembly)" DestinationFolder="$(OutputPath)\Thunderstore\" />
+	  <Copy SourceFiles="README.md" DestinationFolder="$(OutputPath)\Thunderstore\" />
+	  <Copy SourceFiles="CHANGELOG.md" DestinationFolder="$(OutputPath)\Thunderstore\" />
+	  <Copy SourceFiles="manifest.json" DestinationFolder="$(OutputPath)\Thunderstore\" />
+	  <Copy SourceFiles="icon.png" DestinationFolder="$(OutputPath)\Thunderstore\" />
+
+	  <ItemGroup>
+		  <_CopyItems Include="$(OutputPath)\ThunderStore\**\*.*" />
+	  </ItemGroup>
+
+	  <!-- Create a thunderstore folders to AgainstTheStorm game folder, courtesy of James and DebugMenu mod -->
+	  <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\scheals-GetSharkCat\%(RecursiveDir)" />
+	  <Copy SourceFiles="README.md" DestinationFolder="$(BepInExPath)\BepInEx\plugins\scheals-GetSharkCat\" />
+	  <Copy SourceFiles="CHANGELOG.md" DestinationFolder="$(BepInExPath)\BepInEx\plugins\scheals-GetSharkCat\" />
+	  <Copy SourceFiles="manifest.json" DestinationFolder="$(BepInExPath)\BepInEx\plugins\scheals-GetSharkCat\" />
+	  <Copy SourceFiles="icon.png" DestinationFolder="$(BepInExPath)\BepInEx\plugins\scheals-GetSharkCat\" />
+	  <Copy SourceFiles="@(Assembly)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\scheals-GetSharkCat\" />
   </Target>
 </Project>

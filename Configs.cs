@@ -13,8 +13,6 @@ public static class Configs
             m_EffectEnabled.Value = value;
             Plugin.Instance.Config.Save();
         }
-
-
     }
 
     private static ConfigEntry<bool> m_EffectEnabled = Bind("General", "Add Cat perk effect", false, "When set to true adds the associated reward perk.");
