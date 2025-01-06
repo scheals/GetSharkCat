@@ -25,9 +25,20 @@ public static class Configs
         }
     }
 
+    public static bool AddToOngoingGames
+    {
+        get => m_AddToOngoingGames.Value;
+        set
+        {
+            m_AddToOngoingGames.Value = value;
+            Plugin.Instance.Config.Save();
+        }
+    }
+
     private static ConfigEntry<bool> m_EffectGrantingEnabled = Bind("General", "Add Cat perk effect", false, "When set to true adds the associated reward perk.");
     private static ConfigEntry<bool> m_CheckForDuplicates = Bind("General", "Check for duplicate cats and effects", true,
         "When set to true it checks for presence of other cats or effects being active already.");
+    private static ConfigEntry<bool> m_AddToOngoingGames = Bind("General", "Add in ongoing games", false, "When set to true executes in ongoing games.");
 
 
     private static ConfigEntry<T> Bind<T>(string section, string key, T defaultValue, string description)

@@ -1,9 +1,5 @@
-using BepInEx;
-using BepInEx.Logging;
 using Eremite;
 using Eremite.Model;
-using GetSharkCat;
-
 
 namespace GetSharkCat;
 public class CatGranter
